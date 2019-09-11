@@ -1,0 +1,15 @@
+{
+  "name": "lambdaName",
+  "version": "1.0.0",
+  "description": "lambda description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "goify-promise": "gist:a7401cf383d378ffc56c93152986dded",
+    "node-fetch": "^2.1.2"
+  }
+}

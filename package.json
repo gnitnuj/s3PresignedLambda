@@ -1,0 +1,6 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "yargs": "^13.3.0"
+  }
+}
