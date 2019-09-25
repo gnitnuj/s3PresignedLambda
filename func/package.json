@@ -8,8 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "goify-promise": "gist:a7401cf383d378ffc56c93152986dded",
-    "node-fetch": "^2.1.2"
-  }
+  "dependencies": {}
 }

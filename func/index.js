@@ -1,45 +1,53 @@
-const fetch = require("node-fetch");
-const go = require("goify-promise");
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3({
+  signatureVersion: 'v4',
+});
 
 exports.handler = async (event, context, callback) => {
   if (!event) {
     return;
   }
 
+  if (verboseMode) {
+    console.log("Request: " + JSON.stringify(event));
+  }
+
   const queryStringParameters = event["queryStringParameters"];
   const verboseMode = queryStringParameters.verbose ? queryStringParameters.verbose : false;
 
-  if (!queryStringParameters.param1) {
-    return callback(new Error(`missing required param`));
+  if (!queryStringParameters.bucket) {
+    return callback(new Error(`missing required param: bucket`));
   }
 
-  const url = `some-example-endpoint-to-hit`;
-  let err, response;
-  [err, response] = await go(
-    fetch(url, {
-      method: "GET",
-      headers: {}
-    })
-  );
-  if (err) {
-    console.info(`url: ${url}`);
-    return callback(new Error(`error fetching json from ${url}: ${err}`));
-  }
-
-  let json;
-  [err, json] = await go(response.json());
-  if (err) {
-    console.info(`json: ${JSON.stringify(json)}`);
-    return callback(new Error(`error parsing json from fetch promise: ${err}`));
+  if (!queryStringParameters.path) {
+    return callback(new Error(`missing required param: path`));
   }
 
   if (verboseMode) {
-    console.log(`Final Response: ${JSON.stringify(json, undefined, 2)}`);
+    console.log(`Creating URL for Bucket: ${queryStringParameters.bucket} & Path: ${queryStringParameters.path}`);
+  }
+
+  const url = s3.getSignedUrl('putObject', {
+    Bucket: queryStringParameters.bucket,
+    Key: queryStringParameters.path,
+    Expires: 300,
+  });
+
+  if (verboseMode) {
+    console.log(`s3 Presigned URL: ${url}`);
+  }
+
+  const responseBody = {
+    s3PresignedUrl: url,
+  };
+
+  if (verboseMode) {
+    console.log(`Final Response: ${JSON.stringify(responseBody, undefined, 2)}`);
   }
 
   callback(null, {
     statusCode: "200",
-    body: JSON.stringify(json),
+    body: JSON.stringify(responseBody),
     headers: {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
