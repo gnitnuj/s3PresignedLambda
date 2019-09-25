@@ -8,8 +8,4 @@ const args = {
     }
 };
 
-if (argv.param1) {
-    args.queryStringParameters.param1 = argv.param1;
-}
-
 console.log(require('./index').handler(args, {}, function () { }));

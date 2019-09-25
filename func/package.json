@@ -1,7 +1,7 @@
 {
-  "name": "lambdaName",
+  "name": "s3PresignedLambda",
   "version": "1.0.0",
-  "description": "lambda description",
+  "description": "lambda that returns a presigned put url for uploading to an s3 bucket",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
